@@ -6,6 +6,9 @@
 pool:
   vmImage: ubuntu-latest
 
+variables:
+  buildConfiguration: 'Release'
+
 stages:
   - stage: build_web_api
     displayName: Build web api
@@ -23,3 +26,4 @@ stages:
             inputs:
              command: 'build'
              projects: 'Pipelines.Server/**/*.csproj'
+             arguments: '--configuration $(buildConfiguration)'
