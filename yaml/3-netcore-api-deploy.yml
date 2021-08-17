@@ -29,7 +29,7 @@ stages:
             targetPath: $(Build.ArtifactStagingDirectory)
             artifactName: $(buildArtifactName)
   - stage: deploy_web_api_dev
-    displayName: Deploy web api to DEV
+    displayName: DEV - deploy web api
     condition: succeeded()
     dependsOn: build_web_api
     jobs:

@@ -13,7 +13,7 @@ stages:
     jobs:
       - template: templates/template-build-web-api-core.yml
   - stage: deploy_web_api_dev
-    displayName: Deploy web api to DEV
+    displayName: DEV - deploy web api
     condition: succeeded()
     dependsOn: build_web_api
     jobs:
