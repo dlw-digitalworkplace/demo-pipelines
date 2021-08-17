@@ -40,10 +40,10 @@ stages:
             deploy:
               steps:
                 - task: AzureRmWebAppDeployment@4
-                displayName: Deploy Web Api (.NET Core)
-                inputs:
-                  ConnectionType: AzureRM
-                  azureSubscription: svc_connection_DEV
-                  appType: webApp
-                  WebAppName: $(netCoreApiName)
-                  Package: $(Pipeline.Workspace)/$(buildArtifactName)/Pipelines.WebApi.zip
+                  displayName: Deploy Web Api (.NET Core)
+                  inputs:
+                    ConnectionType: AzureRM
+                    azureSubscription: svc_connection_DEV
+                    appType: webApp
+                    WebAppName: $(netCoreApiName)
+                    Package: $(Pipeline.Workspace)/$(buildArtifactName)/Pipelines.WebApi.zip
