@@ -20,6 +20,5 @@ stages:
       - template: templates/template-deploy-web-api-core.yml
         parameters:
           environment: DEV
-          package: '$(Pipeline.Workspace)/$(buildArtifactName)/Pipelines.WebApi.zip'
           serviceConnection: svc_connection_DEV
-          webAppName: '$(netCoreApiName)'
+          webAppName: dlwr-pipelines-dev-api-core
