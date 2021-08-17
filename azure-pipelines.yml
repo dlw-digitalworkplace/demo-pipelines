@@ -12,5 +12,5 @@ pool:
 - task: DotNetCoreCLI@2
   inputs:
     command: 'restore'
-    projects: 'Pipelines.Server/*'
+    projects: 'Pipelines.Server/**.csproj'
     feedsToUse: 'select'
