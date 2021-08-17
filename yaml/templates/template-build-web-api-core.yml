@@ -6,7 +6,7 @@ jobs:
       displayName: ZIP web api package
       inputs:
         command: publish
-        projects: $(projectPath)
+        projects: $(projectPath) # we rely on the variable being present when called.
         publishWebProjects: True
         arguments: --configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)
         zipAfterPublish: True
@@ -16,4 +16,4 @@ jobs:
       displayName: Create build artifact
       inputs:
         targetPath: $(Build.ArtifactStagingDirectory)
-        artifactName: $(buildArtifactName)
+        artifactName: $(buildArtifactName) # we rely on the variable being present when called.

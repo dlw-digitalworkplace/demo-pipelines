@@ -1,0 +1,26 @@
+parameters:
+  - name: environment
+    type: string
+  - name: package
+    type: string
+  - name: serviceConnection
+    type: string
+  - name: webAppName
+    type: string
+
+- deployment: deploy_web_api
+        pool:
+          vmImage: windows-latest
+        environment: ${{ environment }}
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - task: AzureRmWebAppDeployment@4
+                  displayName: Deploy Web Api (.NET Core)
+                  inputs:
+                    ConnectionType: AzureRM
+                    azureSubscription: ${{ serviceConnection }}
+                    appType: webApp
+                    WebAppName: ${{ webAppName }}
+                    Package: ${{ package }}
