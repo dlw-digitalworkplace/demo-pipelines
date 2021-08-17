@@ -3,14 +3,16 @@
 # Add steps that build, run tests, deploy, and more:
 # https://aka.ms/yaml
 
-trigger:
-- main
-
 pool:
   vmImage: ubuntu-latest
 
-- task: DotNetCoreCLI@2
-  inputs:
-    command: 'restore'
-    projects: 'Pipelines.Server/**.csproj'
-    feedsToUse: 'select'
+stages:
+  - stage: Build web api
+    jobs:
+      - job: restore_web_api
+        displayName: Restoring packages for web api
+        steps:
+          - task: DotNetCoreCLI@2
+            inputs:
+             command: 'restore'
+             projects: 'Pipelines.Server/**.csproj'
