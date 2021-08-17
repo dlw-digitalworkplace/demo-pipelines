@@ -14,7 +14,7 @@ stages:
     displayName: Build web api
     jobs:
       - job: build_web_api
-        displayName: Restoring packages for web api
+        displayName: Building web api
         steps:
           - task: DotNetCoreCLI@2
             displayName: Restoring packages
@@ -27,3 +27,18 @@ stages:
              command: 'build'
              projects: 'Pipelines.Server/**/*.csproj'
              arguments: '--configuration $(buildConfiguration)'
+      - job: publish_web_api
+        displayName: Publish web api
+        steps:
+        - task: DotNetCoreCLI@2
+          inputs:
+            command: publish
+            publishWebProjects: True
+            arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)'
+            zipAfterPublish: True
+
+        # this code takes all the files in $(Build.ArtifactStagingDirectory) and uploads them as an artifact of your build.
+        - task: PublishPipelineArtifact@1
+          inputs:
+            targetPath: '$(Build.ArtifactStagingDirectory)' 
+            artifactName: '.NET Core web api'
