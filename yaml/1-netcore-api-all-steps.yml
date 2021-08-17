@@ -1,8 +1,3 @@
-# Starter pipeline
-# Start with a minimal pipeline that you can customize to build and deploy your code.
-# Add steps that build, run tests, deploy, and more:
-# https://aka.ms/yaml
-
 pool:
   vmImage: ubuntu-latest
 
@@ -11,7 +6,7 @@ variables:
 
 stages:
   - stage: build_web_api
-    displayName: Build web api
+    displayName: Prepare deployment web api
     jobs:
       - job: build_web_api
         displayName: Building web api
@@ -20,15 +15,16 @@ stages:
             displayName: Restoring packages
             inputs:
              command: 'restore'
-             projects: 'Pipelines.Server/**/*.csproj'
+             projects: 'server/NetCore/**/*.csproj'
           - task: DotNetCoreCLI@2
             displayName: Building csproj
             inputs:
              command: 'build'
-             projects: 'Pipelines.Server/**/*.csproj'
+             projects: 'server/NetCore/**/*.csproj'
              arguments: '--configuration $(buildConfiguration)'
       - job: publish_web_api
         displayName: Publish web api
+        depensOn: build_web_api
         steps:
         - task: DotNetCoreCLI@2
           inputs:
@@ -41,4 +37,4 @@ stages:
         - task: PublishPipelineArtifact@1
           inputs:
             targetPath: '$(Build.ArtifactStagingDirectory)' 
-            artifactName: '.NET Core web api'
+            artifactName: '.NET Core web api - all steps'

@@ -1,0 +1,26 @@
+pool:
+  vmImage: ubuntu-latest
+
+variables:
+  buildConfiguration: 'Release'
+
+stages:
+  - stage: build_web_api
+    displayName: Prepare deployment web api
+    jobs:
+      - job: publish_web_api
+        displayName: Publish web api
+        steps:
+        - task: DotNetCoreCLI@2
+          inputs:
+            command: publish
+            projects: 'server/NetCore/**/*.csproj'
+            publishWebProjects: True
+            arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)'
+            zipAfterPublish: True
+
+        # this code takes all the files in $(Build.ArtifactStagingDirectory) and uploads them as an artifact of your build.
+        - task: PublishPipelineArtifact@1
+          inputs:
+            targetPath: '$(Build.ArtifactStagingDirectory)' 
+            artifactName: '.NET Core web api - minimal steps'
