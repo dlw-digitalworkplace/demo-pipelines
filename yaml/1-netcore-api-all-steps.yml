@@ -24,7 +24,7 @@ stages:
              arguments: '--configuration $(buildConfiguration)'
       - job: publish_web_api
         displayName: Publish web api
-        depensOn: build_web_api
+        dependsOn: build_web_api
         steps:
         - task: DotNetCoreCLI@2
           inputs:
