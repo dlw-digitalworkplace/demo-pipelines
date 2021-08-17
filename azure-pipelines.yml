@@ -10,10 +10,16 @@ stages:
   - stage: build_web_api
     displayName: Build web api
     jobs:
-      - job: restore_web_api
+      - job: build_web_api
         displayName: Restoring packages for web api
         steps:
           - task: DotNetCoreCLI@2
+            displayName: Restoring packages
             inputs:
              command: 'restore'
+             projects: 'Pipelines.Server/**/*.csproj'
+          - task: DotNetCoreCLI@2
+            displayName: Building csproj
+            inputs:
+             command: 'build'
              projects: 'Pipelines.Server/**/*.csproj'
