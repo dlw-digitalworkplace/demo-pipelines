@@ -11,7 +11,7 @@ jobs:
     displayName: Deploy web api
     pool:
       vmImage: windows-latest
-    environment: ${{ environment }}
+    environment: ${{ parameters.environment }}
     strategy:
       runOnce:
         deploy:
@@ -20,7 +20,7 @@ jobs:
               displayName: Deploy Web Api (.NET Core)
               inputs:
                 ConnectionType: AzureRM
-                azureSubscription: ${{ serviceConnection }}
+                azureSubscription: ${{ parameters.serviceConnection }}
                 appType: webApp
-                WebAppName: ${{ webAppName }}
+                WebAppName: ${{ parameters.webAppName }}
                 Package: $(Pipeline.Workspace)/$(buildArtifactName)/Pipelines.WebApi.zip
