@@ -23,4 +23,4 @@ stages:
           environment: DEV
           package: $(Pipeline.Workspace)/$(buildArtifactName)/Pipelines.WebApi.zip
           serviceConnection: $(serviceConnectionDev)
-          webbAppName: $(netCoreApiName)
+          webAppName: $(netCoreApiName)
