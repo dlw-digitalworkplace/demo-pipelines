@@ -11,4 +11,4 @@ stages:
   - stage: build_web_api
     displayName: Prepare deployment web api
     jobs:
-      - template: template-build-web-api-core.yml
+      - template: templates/template-build-web-api-core.yml
