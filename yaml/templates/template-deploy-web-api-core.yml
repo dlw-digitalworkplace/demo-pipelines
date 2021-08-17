@@ -10,9 +10,10 @@ parameters:
 
 jobs:
   - deployment: deploy_web_api
+    displayName: Deploy web api
     pool:
       vmImage: windows-latest
-    environment: ${{ environment }}
+    environment: "${{ environment }}"
     strategy:
       runOnce:
         deploy:
@@ -21,7 +22,7 @@ jobs:
               displayName: Deploy Web Api (.NET Core)
               inputs:
                 ConnectionType: AzureRM
-                azureSubscription: ${{ serviceConnection }}
+                azureSubscription: "${{ serviceConnection }}"
                 appType: webApp
-                WebAppName: ${{ webAppName }}
-                Package: ${{ package }} 
+                WebAppName: "${{ webAppName }}"
+                Package: "${{ package }}"

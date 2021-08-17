@@ -34,6 +34,7 @@ stages:
     dependsOn: build_web_api
     jobs:
       - deployment: deploy_web_api
+        displayName: Deploy web api
         pool:
           vmImage: windows-latest
         environment: DEV
