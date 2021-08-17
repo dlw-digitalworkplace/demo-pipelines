@@ -27,6 +27,7 @@ stages:
         dependsOn: build_web_api
         steps:
         - task: DotNetCoreCLI@2
+          displayName: ZIP web api package
           inputs:
             command: publish
             publishWebProjects: True
@@ -35,6 +36,7 @@ stages:
 
         # this code takes all the files in $(Build.ArtifactStagingDirectory) and uploads them as an artifact of your build.
         - task: PublishPipelineArtifact@1
+          displayName: Create build artifact
           inputs:
             targetPath: '$(Build.ArtifactStagingDirectory)' 
             artifactName: '.NET Core web api - all steps'
