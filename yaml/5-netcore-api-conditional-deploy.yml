@@ -1,0 +1,79 @@
+parameters:
+  - name: enableDev
+    displayName: Deploy to DEV?
+    default: true
+  - name: enableQa
+    displayName: Deploy to QA?
+    default: true
+  - name: enableProd
+    displayName: Deploy to PROD?
+    default: false
+
+variables:
+  buildConfiguration: Release
+  buildArtifactName: .NET Core web api - minimal steps
+  envDev: DEV
+  netCoreApiNameDev: dlwr-pipelines-dev-api-core
+  netCoreApiNameQa: dlwr-pipelines-qa-api-core
+  netCoreApiNameProd: dlwr-pipelines-prod-api-core
+  projectPath: server/NetCore/**/*.csproj
+  projectPackage: $(Pipeline.Workspace)/$(buildArtifactName)/Pipelines.WebApi.zip
+  serviceConnectionDev: svc_connection_DEV
+  serviceConnectionQa: svc_connection_DEV
+  serviceConnectionProd: svc_connection_DEV
+
+pool:
+  vmImage: ubuntu-latest
+
+stages:
+  - stage: build_web_api
+    displayName: Prepare deployment web api
+    jobs:
+      - template: templates/template-build-web-api-core.yml
+
+  - ${{ if eq(parameters['enableDev'], true) }}:
+    - stage: deploy_web_api_dev
+      displayName: DEV - deploy web api
+      condition: succeeded()
+      dependsOn: build_web_api
+      jobs:
+        - template: templates/template-deploy-web-api-core.yml
+          parameters:
+            environment: $(envDev)
+            projectPackage: $(projectPackage)
+            serviceConnection: $(serviceConnectionDev)
+            webAppName: $(netCoreApiNameDev)
+
+  - ${{ if eq(parameters['enableQa'], true) }}:
+    - stage: deploy_web_api_qa
+      displayName: QA - deploy web api
+      condition: succeeded()
+      dependsOn:
+        - ${{ if eq(parameters['enableDev'], true) }}:
+          - deploy_web_api_dev
+        - build_web_api
+      jobs:
+        - template: templates/template-deploy-web-api-core.yml
+          parameters:
+            environment: $(envQa)
+            projectPackage: $(projectPackage)
+            serviceConnection: $(serviceConnectionQa)
+            webAppName: $(netCoreApiNameQa)
+            
+  - ${{ if eq(parameters['enableProd'], true) }}:
+    - stage: deploy_web_api_prod
+      displayName: PROD - deploy web api
+      condition: succeeded()
+      dependsOn:
+        - ${{ if eq(parameters['enableDev'], true) }}:
+          - deploy_web_api_dev
+        - ${{ if eq(parameters['enableQa'], true) }}:
+          - deploy_web_api_qa
+        - build_web_api
+      jobs:
+        - template: templates/template-deploy-web-api-core.yml
+          parameters:
+            environment: $(envProd)
+            projectPackage: $(projectPackage)
+            serviceConnection: $(serviceConnectionProd)
+            webAppName: $(netCoreApiNameProd)
