@@ -1,0 +1,33 @@
+parameters:
+  - name: buildArtifactName
+    type: string
+
+jobs:
+  - job: BuildWebApi
+    displayName: Build Web Api
+    variables:
+      sourceDirectory: $(Build.SourcesDirectory)/server/NetFramework
+    steps:
+      - task: NuGetToolInstaller@1
+        displayName: Install NuGet v5.x
+        inputs:
+          versionSpec: 5.x
+
+      - task: NuGetCommand@2
+        displayName: Restore NuGet packages
+        inputs:
+          restoreSolution: $(sourceDirectory)/Pipelines.NetFramework.sln
+
+      - task: VSBuild@1
+        displayName: Build Web App project
+        inputs:
+          solution: $(sourceDirectory)/Pipelines.NetFramework/Pipelines.WebApp/Pipelines.WebApp.csproj
+          msbuildArgs: /p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation=$(Build.StagingDirectory)
+          platform: $(buildPlatform)
+          configuration: $(buildConfiguration)
+
+      - task: PublishPipelineArtifact@1
+        displayName: Publish pipeline output
+        inputs:
+          targetPath: $(Build.StagingDirectory)
+          artifact: ${{ parameters.buildArtifactName }}
