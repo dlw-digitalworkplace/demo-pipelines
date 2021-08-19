@@ -21,7 +21,7 @@ jobs:
       - task: VSBuild@1
         displayName: Build Web App project
         inputs:
-          solution: $(sourceDirectory)/Pipelines.WebApp/Pipelines.WebApp.csproj
+          solution: $(sourceDirectory)/Pipelines.NetFramework/Pipelines.WebApp/Pipelines.WebApp.csproj
           msbuildArgs: /p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation=$(Build.StagingDirectory)
           platform: $(buildPlatform)
           configuration: $(buildConfiguration)
