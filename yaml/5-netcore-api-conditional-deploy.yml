@@ -16,6 +16,8 @@ variables:
   buildConfiguration: Release
   buildArtifactName: .NET Core web api - minimal steps
   envDev: DEV
+  envQa: QA
+  envProd: PROD
   netCoreApiNameDev: dlwr-pipelines-dev-api-core
   netCoreApiNameQa: dlwr-pipelines-qa-api-core
   netCoreApiNameProd: dlwr-pipelines-prod-api-core
