@@ -1,7 +1,10 @@
 parameters:
   - name: environment
     type: string
+  - name: projectPackage
+    type: string
   - name: serviceConnection
+    type: string
     type: string
   - name: webAppName
     type: string
@@ -23,4 +26,4 @@ jobs:
                 azureSubscription: ${{ parameters.serviceConnection }}
                 appType: webApp
                 WebAppName: ${{ parameters.webAppName }}
-                Package: $(Pipeline.Workspace)/$(buildArtifactName)/Pipelines.WebApi.zip
+                Package: ${{ parameters.projectPackage }}

@@ -4,14 +4,18 @@ pool:
 variables:
   buildConfiguration: Release
   buildArtifactName: .NET Core web api - minimal steps
+  envDev: DEV
   netCoreApiName: dlwr-pipelines-dev-api-core
   projectPath: server/NetCore/**/*.csproj
+  projectPackage: $(Pipeline.Workspace)/$(buildArtifactName)/Pipelines.WebApi.zip
+  serviceConnectionDev: svc_connection_DEV
 
 stages:
   - stage: build_web_api
     displayName: Prepare deployment web api
     jobs:
       - template: templates/template-build-web-api-core.yml
+
   - stage: deploy_web_api_dev
     displayName: DEV - deploy web api
     condition: succeeded()
@@ -19,6 +23,7 @@ stages:
     jobs:
       - template: templates/template-deploy-web-api-core.yml
         parameters:
-          environment: DEV
-          serviceConnection: svc_connection_DEV
-          webAppName: dlwr-pipelines-dev-api-core
+          environment: $(envDev)
+          projectPackage: $(projectPackage)
+          serviceConnection: $(serviceConnectionDev)
+          webAppName: $(netCoreApiName)
