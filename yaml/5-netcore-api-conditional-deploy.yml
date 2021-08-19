@@ -1,12 +1,15 @@
 parameters:
   - name: enableDev
     displayName: Deploy to DEV?
+    type: boolean
     default: true
   - name: enableQa
     displayName: Deploy to QA?
+    type: boolean
     default: true
   - name: enableProd
     displayName: Deploy to PROD?
+    type: boolean
     default: false
 
 variables:
