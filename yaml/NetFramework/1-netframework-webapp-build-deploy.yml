@@ -40,7 +40,7 @@ variables:
   serviceConnectionProd: svc_connection_DEV
 
 pool:
-  vmImage: ubuntu-latest
+  vmImage: windows-latest # ubuntu will fail here ofc!
 
 stages:
   - stage: build_web_app
