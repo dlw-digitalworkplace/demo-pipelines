@@ -30,9 +30,9 @@ variables:
   envDev: DEV
   envQa: QA
   envProd: PROD
-  netFrameworkNameDev: dlwr-pipelines-dev-app-netframework
-  netFrameworkNameQa: dlwr-pipelines-qa-app-netframework
-  netFrameworkNameProd: dlwr-pipelines-prod-app-netframework
+  netFrameworkNameDev: dlwr-pipelines-dev-webapp-netframework
+  netFrameworkNameQa: dlwr-pipelines-qa-webapp-netframework
+  netFrameworkNameProd: dlwr-pipelines-prod-webapp-netframework
   projectPath: server/NetFramework/**/*.csproj
   projectPackage: $(Pipeline.Workspace)/$(buildArtifactName)/Pipelines.WebApp.zip
   serviceConnectionDev: svc_connection_DEV
