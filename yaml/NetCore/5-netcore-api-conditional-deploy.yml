@@ -14,7 +14,7 @@ parameters:
 
 variables:
   buildConfiguration: Release
-  buildArtifactName: .NET Core web api - minimal steps
+  buildArtifactName: .NET Core web api
   envDev: DEV
   envQa: QA
   envProd: PROD

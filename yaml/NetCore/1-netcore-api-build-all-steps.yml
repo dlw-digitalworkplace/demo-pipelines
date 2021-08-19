@@ -2,7 +2,7 @@ pool:
   vmImage: ubuntu-latest
 
 variables:
-  buildConfiguration: 'Release'
+  buildConfiguration: Release
 
 stages:
   - stage: build_web_api
@@ -14,14 +14,14 @@ stages:
           - task: DotNetCoreCLI@2
             displayName: Restoring packages
             inputs:
-             command: 'restore'
-             projects: 'server/NetCore/**/*.csproj'
+             command: restore
+             projects: server/NetCore/**/*.csproj
           - task: DotNetCoreCLI@2
             displayName: Building csproj
             inputs:
-             command: 'build'
-             projects: 'server/NetCore/**/*.csproj'
-             arguments: '--configuration $(buildConfiguration)'
+             command: build
+             projects: server/NetCore/**/*.csproj
+             arguments: --configuration $(buildConfiguration)
       - job: publish_web_api
         displayName: Publish web api
         dependsOn: build_web_api
@@ -31,12 +31,12 @@ stages:
           inputs:
             command: publish
             publishWebProjects: True
-            arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)'
+            arguments: --configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)
             zipAfterPublish: True
 
         # this code takes all the files in $(Build.ArtifactStagingDirectory) and uploads them as an artifact of your build.
         - task: PublishPipelineArtifact@1
           displayName: Create build artifact
           inputs:
-            targetPath: '$(Build.ArtifactStagingDirectory)' 
-            artifactName: '.NET Core web api - all steps'
+            targetPath: $(Build.ArtifactStagingDirectory)
+            artifactName: .NET Core web api - all steps

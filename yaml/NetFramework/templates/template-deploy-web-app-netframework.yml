@@ -1,0 +1,28 @@
+parameters:
+  - name: environment
+    type: string
+  - name: projectPackage
+    type: string
+  - name: serviceConnection
+    type: string
+  - name: webAppName
+    type: string
+
+jobs:
+  - deployment: deploy_web_app
+    displayName: Deploy web app
+    pool:
+      vmImage: windows-latest
+    environment: ${{ parameters.environment }}
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+            - task: AzureRmWebAppDeployment@4
+              displayName: Deploy Web App (.NET Framework)
+              inputs:
+                ConnectionType: AzureRM
+                azureSubscription: ${{ parameters.serviceConnection }}
+                appType: webApp
+                WebAppName: ${{ parameters.webAppName }}
+                Package: ${{ parameters.projectPackage }}

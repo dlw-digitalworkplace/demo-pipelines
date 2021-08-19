@@ -3,7 +3,7 @@ pool:
 
 variables:
   buildConfiguration: Release
-  buildArtifactName: .NET Core web api - minimal steps
+  buildArtifactName: .NET Core web api
   netCoreApiName: dlwr-pipelines-dev-api-core
 
 stages:

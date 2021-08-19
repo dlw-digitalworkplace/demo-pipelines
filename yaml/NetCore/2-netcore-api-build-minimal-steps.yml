@@ -2,7 +2,7 @@ pool:
   vmImage: ubuntu-latest
 
 variables:
-  buildConfiguration: 'Release'
+  buildConfiguration: Release
 
 stages:
   - stage: build_web_api
@@ -15,14 +15,14 @@ stages:
           displayName: ZIP web api package
           inputs:
             command: publish
-            projects: 'server/NetCore/**/*.csproj'
+            projects: server/NetCore/**/*.csproj
             publishWebProjects: True
-            arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)'
+            arguments: --configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)
             zipAfterPublish: True
 
         # this code takes all the files in $(Build.ArtifactStagingDirectory) and uploads them as an artifact of your build.
         - task: PublishPipelineArtifact@1
           displayName: Create build artifact
           inputs:
-            targetPath: '$(Build.ArtifactStagingDirectory)' 
-            artifactName: '.NET Core web api - minimal steps'
+            targetPath: $(Build.ArtifactStagingDirectory)
+            artifactName: .NET Core web api - minimal steps

@@ -1,0 +1,98 @@
+trigger:
+  batch: true
+  branches:
+    include:
+    - master
+    - release/*
+    exclude:
+    - release/old/*
+  paths:
+    include:
+    - server/NetFramework/Pipelines.NetFramework/Pipelines.WebApp/*
+
+parameters:
+  - name: enableDev
+    displayName: Deploy to DEV?
+    type: boolean
+    default: true
+  - name: enableQa
+    displayName: Deploy to QA?
+    type: boolean
+    default: false
+  - name: enableProd
+    displayName: Deploy to PROD?
+    type: boolean
+    default: false
+
+variables:
+  buildConfiguration: Release
+  buildArtifactName: .NET Framework web app build
+  envDev: DEV
+  envQa: QA
+  envProd: PROD
+  netFrameworkNameDev: dlwr-pipelines-dev-app-netframework
+  netFrameworkNameQa: dlwr-pipelines-qa-app-netframework
+  netFrameworkNameProd: dlwr-pipelines-prod-app-netframework
+  projectPath: server/NetFramework/**/*.csproj
+  projectPackage: $(Pipeline.Workspace)/$(buildArtifactName)/Pipelines.WebApp.zip
+  serviceConnectionDev: svc_connection_DEV
+  serviceConnectionQa: svc_connection_DEV
+  serviceConnectionProd: svc_connection_DEV
+
+pool:
+  vmImage: ubuntu-latest
+
+stages:
+  - stage: build_web_app
+    displayName: Prepare deployment web app
+    jobs:
+      - template: templates/template-build-web-app-netframework.yml
+        parameters:
+          buildArtifactName: .NET Framework web app
+
+  - ${{ if eq(parameters['enableDev'], true) }}:
+    - stage: deploy_web_app_dev
+      displayName: DEV - deploy web app
+      condition: succeeded()
+      dependsOn: build_web_app
+      jobs:
+        - template: templates/template-deploy-web-app-netframework.yml
+          parameters:
+            environment: $(envDev)
+            projectPackage: $(projectPackage)
+            serviceConnection: $(serviceConnectionDev)
+            webAppName: $(netFrameworkNameDev)
+
+  - ${{ if eq(parameters['enableQa'], true) }}:
+    - stage: deploy_web_app_qa
+      displayName: QA - deploy web app
+      condition: succeeded()
+      dependsOn:
+        - ${{ if eq(parameters['enableDev'], true) }}:
+          - deploy_web_app_dev
+        - build_web_app
+      jobs:
+        - template: templates/template-deploy-web-app-netframework.yml
+          parameters:
+            environment: $(envQa)
+            projectPackage: $(projectPackage)
+            serviceConnection: $(serviceConnectionQa)
+            webAppName: $(netFrameworkNameQa)
+            
+  - ${{ if eq(parameters['enableProd'], true) }}:
+    - stage: deploy_web_app_prod
+      displayName: PROD - deploy web app
+      condition: succeeded()
+      dependsOn:
+        - ${{ if eq(parameters['enableDev'], true) }}:
+          - deploy_web_app_dev
+        - ${{ if eq(parameters['enableQa'], true) }}:
+          - deploy_web_app_qa
+        - build_web_app
+      jobs:
+        - template: templates/template-deploy-web-app-netframework.yml
+          parameters:
+            environment: $(envProd)
+            projectPackage: $(projectPackage)
+            serviceConnection: $(serviceConnectionProd)
+            webAppName: $(netFrameworkNameProd)
