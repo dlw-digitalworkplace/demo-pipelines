@@ -48,7 +48,7 @@ stages:
     jobs:
       - template: templates/template-build-web-app-netframework.yml
         parameters:
-          buildArtifactName: .NET Framework web app
+          buildArtifactName: $(buildArtifactName)
 
   - ${{ if eq(parameters['enableDev'], true) }}:
     - stage: deploy_web_app_dev
