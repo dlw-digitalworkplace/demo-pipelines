@@ -6,7 +6,7 @@ jobs:
   - job: BuildWebApi
     displayName: Build Web Api
     variables:
-      sourceDirectory: $(Build.SourcesDirectory)/server/NetFramework
+      sourceDirectory: $(Build.SourcesDirectory)/server/NetFramework/Pipelines.NetFramework
     steps:
       - task: NuGetToolInstaller@1
         displayName: Install NuGet v5.x
@@ -21,7 +21,7 @@ jobs:
       - task: VSBuild@1
         displayName: Build Web App project
         inputs:
-          solution: $(sourceDirectory)/Pipelines.NetFramework/Pipelines.WebApp/Pipelines.WebApp.csproj
+          solution: $(sourceDirectory)/Pipelines.WebApp/Pipelines.WebApp.csproj
           msbuildArgs: /p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation=$(Build.StagingDirectory)
           platform: AnyCPU
           configuration: $(buildConfiguration)
