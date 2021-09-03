@@ -40,19 +40,19 @@ stages:
         - template: templates/template-build-environment-package.yml
           parameters:
             environment: ${{ variables.envDev }} # ! NOTE: cannot contain runtime expression $(envDev), template gives error (cannot resolve var name in time)
-            varGroupName: ${{ varGroupDev }}
+            varGroupName: ${{ variables.varGroupDev }}
 
       - ${{ if eq(parameters['enableQa'], true) }}:
         - template: templates/template-build-environment-package.yml
           parameters:
             environment: ${{ variables.envQa }}
-            varGroupName: ${{ varGroupQa }}
+            varGroupName: ${{ variables.varGroupQa }}
           
       - ${{ if eq(parameters['enableProd'], true) }}:
         - template: templates/template-build-environment-package.yml
           parameters:
             environment: ${{ variables.envProd }}
-            varGroupName: ${{ varGroupProd }}
+            varGroupName: ${{ variables.varGroupProd }}
 
   # - ${{ if eq(parameters['enableDev'], true) }}:
   #   - stage: DeployDev
