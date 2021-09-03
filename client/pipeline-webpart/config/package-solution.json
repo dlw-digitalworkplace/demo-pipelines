@@ -1,0 +1,27 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/package-solution.schema.json",
+  "solution": {
+    "name": "pipeline-webpart-client-side-solution",
+    "id": "69133bb8-49b3-4cbc-bd47-f1903cc068cf",
+    "version": "1.0.0.0",
+    "includeClientSideAssets": true,
+    "skipFeatureDeployment": true,
+    "isDomainIsolated": false,
+    "developer": {
+      "name": "",
+      "websiteUrl": "",
+      "privacyUrl": "",
+      "termsOfUseUrl": "",
+      "mpnId": ""
+    }
+    // "webApiPermissionRequests": [
+    //   {
+    //     "resource": "AAD app name",
+    //     "scope": "user_impersonation"
+    //   }
+    // ]
+  },
+  "paths": {
+    "zippedPackage": "solution/pipeline-webpart.sppkg"
+  }
+}

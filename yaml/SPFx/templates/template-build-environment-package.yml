@@ -1,0 +1,66 @@
+parameters:
+  - name: environment
+    type: string
+  - name: varGroupName
+
+jobs:
+  - job: BuildSPFxApp${{ parameters.environment }}
+    displayName: ${{ parameters.environment }} > Build SPFx application
+    pool:
+      vmImage: ubuntu-latest
+    variables:
+      - group: ${{ parameters.varGroupName }}
+      - name: gulpFilePath
+        value: $(Build.SourcesDirectory)/client/pipeline-webpart/gulpfile.js
+      - name: sourceDirectory
+        value: $(Build.SourcesDirectory)/client/pipeline-webpart
+      - name: solution.webApiPermissionRequests.0.resource # replace the AAD app name in package-solution.json
+        value: $(azureADAppName)
+    steps:
+      - task: UseNode@1
+        displayName: Use Node v8.x
+        inputs:
+          version: 8.x
+
+      - task: Npm@1
+        displayName: Install node_modules
+        inputs:
+          command: ci
+          workingDir: $(sourceDirectory)
+
+      - task: FileTransform@1
+        displayName: Update configuration files
+        inputs:
+          folderPath: $(sourceDirectory)/config
+          fileType: json
+          targetFiles: package-solution.json # replace the AAD app name in package-solution.json
+
+      - task: Gulp@1
+        displayName: Bundle project
+        inputs:
+          gulpFile: $(gulpFilePath)
+          targets: bundle
+          arguments: --ship --verbose
+          workingDirectory: $(sourceDirectory)
+
+      - task: Gulp@1
+        displayName: Package project
+        inputs:
+          gulpFile: $(gulpFilePath)
+          targets: package-solution
+          arguments: --ship --verbose
+          workingDirectory: $(sourceDirectory)
+
+      - task: CopyFiles@2
+        displayName: Copy output files
+        inputs:
+          sourceFolder: $(sourceDirectory)/sharepoint/solution
+          contents: |
+            *.sppkg
+          targetFolder: $(Build.StagingDirectory)
+
+      - task: PublishPipelineArtifact@1
+        displayName: Publish pipeline output
+        inputs:
+          targetPath: $(Build.StagingDirectory)
+          artifact: SPFx-${{ parameters.environment }}

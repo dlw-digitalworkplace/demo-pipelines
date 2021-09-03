@@ -1,0 +1,94 @@
+trigger:
+  batch: true
+  branches:
+    include:
+    - master
+    - release/*
+    exclude:
+    - release/old/*
+  paths:
+    include:
+    - client/pipeline-webpart/*
+
+parameters:
+  - name: enableDev
+    displayName: Deploy to DEV?
+    type: boolean
+    default: true
+  - name: enableQa
+    displayName: Deploy to QA?
+    type: boolean
+    default: true
+  - name: enableProd
+    displayName: Deploy to PROD?
+    type: boolean
+    default: false
+
+variables:
+  envDev: DEV
+  envQa: QA
+  envProd: PROD
+  varGroupDev: FrontEnd-DEV
+  varGroupQa: FrontEnd-QA
+  varGroupProd: FrontEnd-PROD
+
+stages:
+  - stage: BuildFrontEnd
+    displayName: "Build front-end"
+    jobs:
+      - ${{ if eq(parameters['enableDev'], true) }}:
+        - template: template-build-environment-package.yml
+          parameters:
+            environment: $(envDev)
+            varGroupName: $(varGroupDev)
+
+      - ${{ if eq(parameters['enableQa'], true) }}:
+        - template: template-build-environment-package.yml
+          parameters:
+            environment: $(envQa)
+            varGroupName: $(varGroupQa)
+          
+      - ${{ if eq(parameters['enableProd'], true) }}:
+        - template: template-build-environment-package.yml
+          parameters:
+            environment: $(envProd)
+            varGroupName: $(varGroupProd)
+
+  # - ${{ if eq(parameters['enableDev'], true) }}:
+  #   - stage: DeployDev
+  #     displayName: "Deploy to DEV"
+  #     condition: succeeded()
+  #     dependsOn: BuildFrontEnd
+  #     variables:
+  #       - group: $(varGroupDev)
+  #     jobs:
+  #       - template: template-deploy.yml
+  #         parameters:
+  #           environment: $(envQa)
+
+  # - ${{ if eq(parameters['enableQa'], true) }}:
+  #   - stage: DeployQa
+  #     displayName: "Deploy to QA"
+  #     condition: succeeded()
+  #     dependsOn: BuildFrontEnd
+  #     variables:
+  #       - group: $(varGroupQa)
+  #     jobs:
+  #       - template: template-deploy.yml
+  #         parameters:
+  #           environment: $(envQa)
+
+  # - ${{ if eq(parameters['enableProd'], true) }}:
+  #   - stage: DeployProd
+  #     displayName: "Deploy to Production"
+  #     condition: succeeded()
+  #     dependsOn:
+  #       - ${{ if eq(parameters['enableQa'], true) }}:
+  #         - DeployQa
+  #       - BuildFrontEnd
+  #     variables:
+  #       - group: $(varGroupProd)
+  #     jobs:
+  #       - template: template-deploy.yml
+  #         parameters:
+  #           environment: $(envProd)
