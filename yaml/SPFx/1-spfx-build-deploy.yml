@@ -39,19 +39,19 @@ stages:
       - ${{ if eq(parameters['enableDev'], true) }}:
         - template: templates/template-build-environment-package.yml
           parameters:
-            environment: $(envDev)
+            environment: "$(envDev)"
             varGroupName: $(varGroupDev)
 
       - ${{ if eq(parameters['enableQa'], true) }}:
         - template: templates/template-build-environment-package.yml
           parameters:
-            environment: $(envQa)
+            environment: "$(envQa)"
             varGroupName: $(varGroupQa)
           
       - ${{ if eq(parameters['enableProd'], true) }}:
         - template: templates/template-build-environment-package.yml
           parameters:
-            environment: $(envProd)
+            environment: "$(envProd)"
             varGroupName: $(varGroupProd)
 
   # - ${{ if eq(parameters['enableDev'], true) }}:
