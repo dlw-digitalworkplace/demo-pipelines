@@ -4,7 +4,7 @@ parameters:
   - name: varGroupName
 
 jobs:
-  - job: "BuildSPFxApp${{ parameters.environment }}"
+  - job: BuildSPFxApp${{ parameters.environment }}
     displayName: ${{ parameters.environment }} > Build SPFx application
     pool:
       vmImage: ubuntu-latest

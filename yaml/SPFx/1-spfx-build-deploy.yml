@@ -34,24 +34,24 @@ variables:
 
 stages:
   - stage: BuildFrontEnd
-    displayName: "Build front-end"
+    displayName: Build front-end
     jobs:
       - ${{ if eq(parameters['enableDev'], true) }}:
         - template: templates/template-build-environment-package.yml
           parameters:
-            environment: $(envDev)
+            environment: DEV # NOTE cannot contain variable, template gives error (cannot resolve var name in time)
             varGroupName: $(varGroupDev)
 
       - ${{ if eq(parameters['enableQa'], true) }}:
         - template: templates/template-build-environment-package.yml
           parameters:
-            environment: $(envQa)
+            environment: QA
             varGroupName: $(varGroupQa)
           
       - ${{ if eq(parameters['enableProd'], true) }}:
         - template: templates/template-build-environment-package.yml
           parameters:
-            environment: $(envProd)
+            environment: PROD
             varGroupName: $(varGroupProd)
 
   # - ${{ if eq(parameters['enableDev'], true) }}:
@@ -64,7 +64,7 @@ stages:
   #     jobs:
   #       - template: templates/template-deploy.yml
   #         parameters:
-  #           environment: $(envQa)
+  #           environment: $(envDev)
 
   # - ${{ if eq(parameters['enableQa'], true) }}:
   #   - stage: DeployQa
