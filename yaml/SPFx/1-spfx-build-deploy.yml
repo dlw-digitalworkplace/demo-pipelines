@@ -37,19 +37,19 @@ stages:
     displayName: "Build front-end"
     jobs:
       - ${{ if eq(parameters['enableDev'], true) }}:
-        - template: template-build-environment-package.yml
+        - template: templates/template-build-environment-package.yml
           parameters:
             environment: $(envDev)
             varGroupName: $(varGroupDev)
 
       - ${{ if eq(parameters['enableQa'], true) }}:
-        - template: template-build-environment-package.yml
+        - template: templates/template-build-environment-package.yml
           parameters:
             environment: $(envQa)
             varGroupName: $(varGroupQa)
           
       - ${{ if eq(parameters['enableProd'], true) }}:
-        - template: template-build-environment-package.yml
+        - template: templates/template-build-environment-package.yml
           parameters:
             environment: $(envProd)
             varGroupName: $(varGroupProd)
@@ -62,7 +62,7 @@ stages:
   #     variables:
   #       - group: $(varGroupDev)
   #     jobs:
-  #       - template: template-deploy.yml
+  #       - template: templates/template-deploy.yml
   #         parameters:
   #           environment: $(envQa)
 
@@ -74,7 +74,7 @@ stages:
   #     variables:
   #       - group: $(varGroupQa)
   #     jobs:
-  #       - template: template-deploy.yml
+  #       - template: templates/template-deploy.yml
   #         parameters:
   #           environment: $(envQa)
 
@@ -89,6 +89,6 @@ stages:
   #     variables:
   #       - group: $(varGroupProd)
   #     jobs:
-  #       - template: template-deploy.yml
+  #       - template: templates/template-deploy.yml
   #         parameters:
   #           environment: $(envProd)
