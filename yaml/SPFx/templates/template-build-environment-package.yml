@@ -18,9 +18,9 @@ jobs:
         value: $(azureADAppName)
     steps:
       - task: UseNode@1
-        displayName: Use Node v8.x
+        displayName: Use Node v10.x
         inputs:
-          version: 8.x
+          version: 10.x
 
       - task: Npm@1
         displayName: Install node_modules
