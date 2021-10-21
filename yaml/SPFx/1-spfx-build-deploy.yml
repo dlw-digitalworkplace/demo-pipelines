@@ -18,7 +18,7 @@ parameters:
   - name: enableQa
     displayName: Deploy to QA?
     type: boolean
-    default: true
+    default: false
   - name: enableProd
     displayName: Deploy to PROD?
     type: boolean
@@ -60,11 +60,11 @@ stages:
         condition: succeeded()
         dependsOn: BuildFrontEnd
         variables:
-          - group: $(varGroupDev)
+          - group: ${{ variables.varGroupDev }}
         jobs:
           - template: templates/template-deploy.yml
             parameters:
-              environment: $(envDev)
+              environment: ${{ variables.envDev }}
 
   # - ${{ if eq(parameters['enableQa'], true) }}:
   #   - stage: DeployQa
@@ -72,11 +72,11 @@ stages:
   #     condition: succeeded()
   #     dependsOn: BuildFrontEnd
   #     variables:
-  #       - group: $(varGroupQa)
+  #       - group:${{ variables.varGroupQa }}
   #     jobs:
   #       - template: templates/template-deploy.yml
   #         parameters:
-  #           environment: $(envQa)
+  #           environment: ${{ variables.envQa }}
 
   # - ${{ if eq(parameters['enableProd'], true) }}:
   #   - stage: DeployProd
@@ -87,8 +87,8 @@ stages:
   #         - DeployQa
   #       - BuildFrontEnd
   #     variables:
-  #       - group: $(varGroupProd)
+  #       - group:${{ variables.varGroupProd }}
   #     jobs:
   #       - template: templates/template-deploy.yml
   #         parameters:
-  #           environment: $(envProd)
+  #           environment: ${{ variables.envProd }}
