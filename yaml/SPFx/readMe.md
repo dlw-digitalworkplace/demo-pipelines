@@ -11,7 +11,7 @@ Important! Add certain permissions to the AAD app:
 
 ## Create certificate
 
-e.g. using openssl
+e.g. using openssl or via https://pnp.github.io/cli-microsoft365/user-guide/connecting-office-365/#log-in-using-a-certificate
 
 openssl req -x509 -sha256 -nodes -days 3650 -newkey rsa:2048 -keyout privateKey.key -out certificate.cer
 openssl pkcs12 -export -out protected.pfx -inkey privateKey.key -in certificate.cer -password pass:"..."
@@ -27,3 +27,5 @@ Set security such that all pipelines can use your secure file.
 
 - spoCertificateThumbprint
 - spoAppCatalogUrl
+- OFFICE365CLI_AADAPPID or CLIMICROSOFT365_AADAPPID (depends on CLI version)
+- OFFICE365CLI_TENANT or CLIMICROSOFT365_TENANT (depends on CLI version)
