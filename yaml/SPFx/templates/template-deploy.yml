@@ -1,0 +1,45 @@
+parameters:
+  - name: environment
+    type: string
+
+jobs:
+  - deployment: DeploySPFxApp
+    displayName: "${{ parameters.environment }} > Deploy SPFx application"
+    environment: "${{ parameters.environment }}"
+    pool:
+      vmImage: "ubuntu-latest"
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+            - task: DownloadSecureFile@1
+              name: deploymentCertificate
+              displayName: "Download deployment certificate"
+              inputs:
+                secureFile: "deployment_cert_${{ parameters.environment }}.pem"
+
+            - task: UseNode@1
+              displayName: "Use Node v10.x"
+              inputs:
+                version: "10.x"
+
+            - task: Npm@1
+              displayName: "Install O365 CLI"
+              inputs:
+                command: custom
+                customCommand: "install --global @pnp/office365-cli@2"
+
+            - task: CmdLine@2
+              displayName: "Connect to SharePoint Online"
+              inputs:
+                script: o365 login --authType certificate --certificateFile $(deploymentCertificate.secureFilePath) --thumbprint $(spoCertificateThumbprint)
+
+            - task: CmdLine@2
+              displayName: "Upload SPFx package"
+              inputs:
+                script: o365 spo app add --appCatalogUrl $(spoAppCatalogUrl) --filePath $(Pipeline.Workspace)/SPFx-${{ parameters.environment }}/pipeline-webpart.sppkg --overwrite
+
+            - task: CmdLine@2
+              displayName: "Deploy SPFx package"
+              inputs:
+                script: o365 spo app deploy --appCatalogUrl $(spoAppCatalogUrl) --name pipeline-webpart.sppkg --skipFeatureDeployment

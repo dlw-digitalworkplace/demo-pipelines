@@ -2,13 +2,13 @@ trigger:
   batch: true
   branches:
     include:
-    - master
-    - release/*
+      - master
+      - release/*
     exclude:
-    - release/old/*
+      - release/old/*
   paths:
     include:
-    - client/pipeline-webpart/*
+      - client/pipeline-webpart/*
 
 parameters:
   - name: enableDev
@@ -37,34 +37,34 @@ stages:
     displayName: Build front-end
     jobs:
       - ${{ if eq(parameters['enableDev'], true) }}:
-        - template: templates/template-build-environment-package.yml
-          parameters:
-            environment: ${{ variables.envDev }} # ! NOTE: cannot contain runtime expression $(envDev), template gives error (cannot resolve var name in time)
-            varGroupName: ${{ variables.varGroupDev }}
+          - template: templates/template-build-environment-package.yml
+            parameters:
+              environment: ${{ variables.envDev }} # ! NOTE: cannot contain runtime expression $(envDev), template gives error (cannot resolve var name in time)
+              varGroupName: ${{ variables.varGroupDev }}
 
       - ${{ if eq(parameters['enableQa'], true) }}:
-        - template: templates/template-build-environment-package.yml
-          parameters:
-            environment: ${{ variables.envQa }}
-            varGroupName: ${{ variables.varGroupQa }}
-          
-      - ${{ if eq(parameters['enableProd'], true) }}:
-        - template: templates/template-build-environment-package.yml
-          parameters:
-            environment: ${{ variables.envProd }}
-            varGroupName: ${{ variables.varGroupProd }}
+          - template: templates/template-build-environment-package.yml
+            parameters:
+              environment: ${{ variables.envQa }}
+              varGroupName: ${{ variables.varGroupQa }}
 
-  # - ${{ if eq(parameters['enableDev'], true) }}:
-  #   - stage: DeployDev
-  #     displayName: "Deploy to DEV"
-  #     condition: succeeded()
-  #     dependsOn: BuildFrontEnd
-  #     variables:
-  #       - group: $(varGroupDev)
-  #     jobs:
-  #       - template: templates/template-deploy.yml
-  #         parameters:
-  #           environment: $(envDev)
+      - ${{ if eq(parameters['enableProd'], true) }}:
+          - template: templates/template-build-environment-package.yml
+            parameters:
+              environment: ${{ variables.envProd }}
+              varGroupName: ${{ variables.varGroupProd }}
+
+  - ${{ if eq(parameters['enableDev'], true) }}:
+      - stage: DeployDev
+        displayName: "Deploy to DEV"
+        condition: succeeded()
+        dependsOn: BuildFrontEnd
+        variables:
+          - group: $(varGroupDev)
+        jobs:
+          - template: templates/template-deploy.yml
+            parameters:
+              environment: $(envDev)
 
   # - ${{ if eq(parameters['enableQa'], true) }}:
   #   - stage: DeployQa

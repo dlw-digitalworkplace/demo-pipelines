@@ -14,8 +14,8 @@ jobs:
         value: $(Build.SourcesDirectory)/client/pipeline-webpart/gulpfile.js
       - name: sourceDirectory
         value: $(Build.SourcesDirectory)/client/pipeline-webpart
-      - name: solution.webApiPermissionRequests.0.resource # replace the AAD app name in package-solution.json
-        value: $(azureADAppName)
+      # - name: solution.webApiPermissionRequests.0.resource # to replace the AAD app name in package-solution.json
+      #   value: $(azureADAppName)
     steps:
       - task: UseNode@1
         displayName: Use Node v10.x
@@ -28,12 +28,12 @@ jobs:
           command: ci
           workingDir: $(sourceDirectory)
 
-      - task: FileTransform@1
-        displayName: Update configuration files
-        inputs:
-          folderPath: $(sourceDirectory)/config
-          fileType: json
-          targetFiles: package-solution.json # replace the AAD app name in package-solution.json
+      # - task: FileTransform@1
+      #   displayName: Update configuration files
+      #   inputs:
+      #     folderPath: $(sourceDirectory)/config
+      #     fileType: json
+      #     targetFiles: package-solution.json # to replace the AAD app name in package-solution.json
 
       - task: Gulp@1
         displayName: Bundle project
