@@ -28,4 +28,4 @@ Set security such that all pipelines can use your secure file.
 - spoCertificateThumbprint
 - spoAppCatalogUrl
 - OFFICE365CLI_AADAPPID or CLIMICROSOFT365_AADAPPID (depends on CLI version)
-- OFFICE365CLI_TENANT or CLIMICROSOFT365_TENANT (depends on CLI version)
+- OFFICE365CLI_TENANT or CLIMICROSOFT365_TENANT (depends on CLI version) -
